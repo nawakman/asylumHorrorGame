@@ -1,0 +1,2 @@
+//"..." fills attributes as if separated by a comma //https://www.freecodecamp.org/news/three-dots-operator-in-javascript/
+//copy permits to set a Vector3 from another without setting each component xyz one by one
