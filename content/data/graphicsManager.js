@@ -5,7 +5,7 @@ export class GraphicsManager extends WebGLRenderer {
     cbUpdate = null//cb for callback, storing the update function in a variable will allow to call it from somewhere else in the code //https://stackoverflow.com/questions/53946822/javascript-how-to-call-a-function-stored-in-a-variable
 
     constructor(scene, camera, fps) {
-        super({ canvas: document.querySelector('#myCanvas') })//get a reference and associate the canvas of the html to the renderer
+        super({ canvas: document.querySelector('#myCanvas'), antialias: true })//get a reference and associate the canvas of the html to the renderer
         this.scene = scene
         this.camera = camera
         this.desiredDeltaTime = 1 / fps

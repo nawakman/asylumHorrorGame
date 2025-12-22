@@ -1,4 +1,4 @@
-import { Scene, BoxGeometry, MeshPhongMaterial, PointLight, Mesh, SpotLight, MathUtils } from 'three'//https://stackoverflow.com/questions/36795819/when-should-i-use-curly-braces-for-es6-import
+import { Scene, BoxGeometry, MeshPhongMaterial, PointLight, Mesh, SpotLight, MathUtils, CubeTextureLoader } from 'three'//https://stackoverflow.com/questions/36795819/when-should-i-use-curly-braces-for-es6-import
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls'
 import {LoadAssets,LoadAnimatedAssets} from './content/data/modelLoader'
 import { AnimationManager } from './content/blueprints/animationManager'
@@ -32,11 +32,14 @@ animManager.PlayAnimation('Armature.001|mixamo.com|Layer0')
 */
 
 //TEST ROOM
-const home=await LoadAssets('./testRoomBigger.glb ')
-world.AddMeshes(home.visuals)
-world.AddInteractions(home.visuals,camera)
-Graph.MakeGraph(home.visuals)
-Graph.HighLightPath("Blue","White")
+const asylum=await LoadAssets('./asylum.glb ')
+world.AddMeshes(asylum.visuals)
+world.AddInteractions(asylum.visuals,camera)
+Graph.MakeGraph(asylum.visuals)
+//console.log(Graph.GetRoom(Graph.GetAdjacentArrows("Corridor1")[1].toRoom).position)
+
+Graph.GetAdjacentArrows("Corridor1")[1].interact()
+//Graph.HighLightPath("Blue","White")
 
 
 
@@ -58,6 +61,19 @@ camera.add(spotlight.target)
 spotlight.target.position.z=-3
 scene.add(camera)
 */
+
+//SKYBOX
+const loader = new CubeTextureLoader();
+loader.setPath( 'skybox/night/' );
+
+const textureCube = loader.load([
+  'px.png', 'nx.png',
+  'py.png', 'ny.png',
+  'pz.png', 'nz.png'
+]);
+
+scene.background = textureCube;
+
 
 scene.add(world)
 

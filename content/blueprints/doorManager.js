@@ -4,9 +4,9 @@ import Utils from "../data/utils";
 export class DoorManager{
 
     static MakeDoor(door,framerate){//adds the needed attributes and functions to the door
-        console.log(framerate)
         door.isOpen=false//creates and initialize variable
         door.isMoving=false
+        door.initialRotation=door.rotation.y
         door.interact=function(){//https://stackoverflow.com/questions/13521833/javascript-add-method-to-object
 
             if(door.isMoving){return}else{door.isMoving=true}//animation already running 
@@ -22,7 +22,7 @@ export class DoorManager{
                     return
                 }
                 t=timer.getElapsedTime()/animDuration
-                door.rotation.y=Utils.SmoothStep(door.isOpen?MathUtils.degToRad(90):0,door.isOpen?0:MathUtils.degToRad(90),t)
+                door.rotation.y=door.initialRotation+Utils.SmoothStep(door.isOpen?MathUtils.degToRad(90):0,door.isOpen?0:MathUtils.degToRad(90),t)
 
             },1/framerate)
         }

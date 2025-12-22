@@ -29,8 +29,10 @@ export class CustomControls{
     }
 
     GetObjectUnderCursor(event){//https://threejs.org/docs/#api/en/core/Raycaster
+        //this.raycaster.layers.set(1);//only react to layer 1 objects
         this.raycaster.setFromCamera( this.pointer, this.camera );
         const intersects = this.raycaster.intersectObjects( this.scene.children );
+        console.log(intersects)
         if(intersects.length>0){
             var root=intersects[0].object//here we loose some raycasting data because we only take the object attribute
             while(root.parent.type=="Mesh" || root.parent.type=="Group"){//determine which root will be used for model transform//https://stackoverflow.com/questions/26202064/how-to-select-a-root-object3d-using-raycaster
@@ -61,4 +63,11 @@ NOTES ABOUT BLENDER EXPORT
         -to move a multimaterial object, we need its root, else only model parts with a single material will move at once
 -the gltf keeps the blender hierarchy
 -in the hierarchy, if an object have only one child it is a "Mesh", if it has children(>=2) it is a "Group", both extends the "Object3D" class
+*/
+/*
+NOTES ABOUT TREE.JS LAYERS
+the default layer is 0
+I put interactable objects in layer 1
+enable() adds a layer
+set() only enable the desired layer
 */

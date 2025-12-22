@@ -36,18 +36,19 @@ export class Graph{//we only need a single graph to represent a level, and we wa
         console.log(this.meshesWithRoom)
     }*/
 
-    static MakeGraph(mapVisuals){//the maps contains all vertices and edges, and other stuff that will be considered as isolated vertex and thus removed
+    static MakeGraph(mapVisuals){//the maps contains all vertices and edges, and other stuff that will be considered as isolated vertex and thus removed)
         for(const mesh of mapVisuals){//this loop separe edges(meshesWithTo) and vertices(meshesWithRoom) in different arrays
             if(mesh.name.includes("To")){
                 this.meshesWithTo.push(mesh)
-            }else if(mesh.name.includes("room")){
-                const meshNameWithoutRoom=mesh.name.split("room")[1]//removes "room" from the String
+            }else if(mesh.name.startsWith("room")){
+                const meshNameWithoutRoom=mesh.name.slice(4)//removes "room" from the String
                 this.meshesWithRoom.set(meshNameWithoutRoom,mesh)
                 this.graph.set(meshNameWithoutRoom,new Map())
             }
         }
         for(const orientedEdge of this.meshesWithTo){//this loop fills the adjacent rooms of each rooms using "meshWithTo" data
             const roomNames=orientedEdge.name.split("To")//the edge is oriented, it goes from the room before "To" to the room after "To"
+            //console.log(orientedEdge.name)
             this.graph.get(roomNames[0]).set(roomNames[1],{arrow:orientedEdge})//finds the room we begin the edge with, tell it that it can now go to "roomNames[1]" //tuple because we might add properties later //https://stackoverflow.com/questions/64278135/how-to-update-map-object-property-values //https://stackoverflow.com/questions/20392782/a-list-of-tuples-in-javascript
         }
         this.FloydWarshall()//create all shortest paths between two vertex

@@ -12,8 +12,8 @@ export class ArrowManager{
             const arrowDirection=Graph.GetRoom(arrow.toRoom).position.clone().sub(Graph.GetRoom(arrow.fromRoom).position)
             const fromRoomPosition=camera.position.clone()
             const toRoomPosition=Graph.GetRoom(arrow.toRoom).position.clone()
-            toRoomPosition.y+=3//raise camera to avoid collision stuck in mesh
-            camera.rotation.x=MathUtils.degToRad(-20)//look below since we'll raise camera
+            toRoomPosition.y+=0.5//raise camera to avoid collision stuck in mesh
+            camera.rotation.x=MathUtils.degToRad(-10)//look below since we'll raise camera
 
             //animate the movement
             if(camera.isMoving){return}else{camera.isMoving=true}//animation already running
@@ -31,10 +31,12 @@ export class ArrowManager{
                     Graph.GetRoom(arrow.toRoom).visible=false
 
                     for(const tempArrow of Graph.GetArrows()){//"arrow" is already used as function argument so we use "tempArrow"
-                        tempArrow.visible=false//hide all arrows
+                        //tempArrow.visible=false//hide all arrows
+                        tempArrow.layers.set(1); //hide and disable collision
                     }
                     for(const adjacentArrow of Graph.GetAdjacentArrows(arrow.toRoom)){
-                        adjacentArrow.visible=true//show only necessary arrows
+                        //adjacentArrow.visible=true//show only necessary arrows
+                        adjacentArrow.layers.set(0); //show and enable collision
                     }
                     return
                 }

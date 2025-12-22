@@ -1,5 +1,5 @@
 import { Object3D } from "three";
-import {DoorManager} from "../blueprints/doorManager";
+import { DoorManager } from "../blueprints/doorManager";
 import { ArrowManager } from "../blueprints/arrowManager"
 
 export class World extends Object3D{
@@ -18,10 +18,16 @@ export class World extends Object3D{
     }
     AddInteractions(meshes,camera){
         for(const mesh of meshes){
-            if(mesh.name.includes('door')){
+            if(mesh.name.includes('door') && !mesh.name.includes('doorway')){
+                /*mesh.traverse((child) => {
+                    if (child.isMesh) {
+                        child.layers.enable(1); 
+                    }
+                })*/
                 DoorManager.MakeDoor(mesh,camera.framerate)
             }
             if(mesh.name.includes('To')){
+                //mesh.layers.enable(1)//enable collision
                 ArrowManager.MakeArrow(mesh,camera)
             }
             /*if(mesh.name.includes('room')){
