@@ -7,34 +7,8 @@ export class Graph{//we only need a single graph to represent a level, and we wa
     static floydWarshallPaths=new Map()//will all shortest paths between two vertex
 
     constructor(){
-        throw Error('A static class cannot be instantiated.')//https://fab1o.medium.com/javascript-static-class-3e1acdaec81
+        throw Error('A static class cannot be instantiated.')//https://fab1o.medium.com/javascript-static-class-3e1acdaec81    
     }
-
-    /*static MakeGraph(mapVisuals){//the maps contains all vertices and edges, and other stuff that will be considered as isolated vertex and thus removed //old
-        for(const mesh of mapVisuals){//this loop separe edges(meshesWithTo) and vertices(meshesWithRoom) in different arrays
-            if(mesh.name.includes("To")){
-                this.meshesWithTo.push(mesh)
-            }else if(mesh.name.includes("room")){
-                const meshNameWithoutRoom=mesh.name.split("room")[1]//removes "room" from the String
-                this.meshesWithRoom.set(meshNameWithoutRoom,mesh)
-                this.graph.push({roomName:meshNameWithoutRoom,adjacentRooms:[]})//push an object containing graph data //https://stackoverflow.com/questions/20392782/a-list-of-tuples-in-javascript
-            }
-        }
-        for(const orientedEdge of this.meshesWithTo){//this loop fills the adjacent rooms of each rooms using "meshWithTo" data
-            const roomNames=orientedEdge.name.split("To")//the edge is oriented, it goes from the room before "To" to the room after "To"
-            const fromRoom=this.graph.find((temp)=>temp.roomName==roomNames[0])//finds the room we begin the edge with
-            fromRoom.adjacentRooms.push({toRoom:roomNames[1],arrow:orientedEdge})//tell it that it can now go to "roomNames[1]"
-        }
-        const lengthBeforeModification=this.graph.length//in the loop we cannot rely on "length" because it will change
-        for(var i=0;i<lengthBeforeModification;i++){//this loop(and the splice after) removes isolated vertices
-            if(this.graph[i].adjacentRooms.length!=0){
-                this.graph.push(this.graph[i])//copy all the values we want to keep at the end of array //https://stackoverflow.com/questions/281264/remove-empty-elements-from-an-array-in-javascript
-            }
-        }
-        this.graph.splice(0,lengthBeforeModification)
-        console.log(this.graph)
-        console.log(this.meshesWithRoom)
-    }*/
 
     static MakeGraph(mapVisuals){//the maps contains all vertices and edges, and other stuff that will be considered as isolated vertex and thus removed)
         for(const mesh of mapVisuals){//this loop separe edges(meshesWithTo) and vertices(meshesWithRoom) in different arrays
@@ -135,5 +109,9 @@ export class Graph{//we only need a single graph to represent a level, and we wa
         for(let i=0;i<path.length-1;i++){
             this.graph.get(path[i]).get(path[i+1]).arrow.material.color.set(0x00ff00)//turn arrows green 
         }
+    }
+
+    static GoBack(){
+        console.log("button works")
     }
 }

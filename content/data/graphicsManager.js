@@ -11,7 +11,12 @@ export class GraphicsManager extends WebGLRenderer {
         this.desiredDeltaTime = 1 / fps
         this.deltaTime = 0
 
-        this.setSize(window.innerWidth, window.innerHeight);
+        window.addEventListener('resize', () => {//updates size when user f11 or resize its window
+            this.setSize(window.innerWidth, window.innerHeight);
+            this.camera.aspect = window.innerWidth / window.innerHeight;
+            this.camera.updateProjectionMatrix();
+        })
+        this.setSize(window.innerWidth, window.innerHeight);//first time do it manually
         this.shadowMap.enabled = true//tells three to render shadows
         this.cbLoop = this.Loop.bind(this)//calls the "loop" function as "this", so when cbLoop is called from anywhere, it is in fact called from "this"
         //https://www.w3schools.com/js/tryit.asp?filename=tryjs_function_bind_borrow

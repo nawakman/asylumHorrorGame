@@ -8,6 +8,7 @@ import {CustomCamera} from './content/blueprints/customCamera'
 import {CustomControls} from './content/data/customControls.js'
 import {CustomLight} from './content/blueprints/customLight'
 import { Graph } from './content/data/graph'
+import { ButtonInteraction } from './content/data/buttonInteraction'
 
 const scene = new Scene()
 const world=new World()
@@ -78,7 +79,8 @@ scene.background = textureCube;
 scene.add(world)
 
 const graphic = new GraphicsManager(scene,camera,framerate)
-//const controls=new OrbitControls(camera,graphic.domElement)//WIP
+const buttonInteraction= new ButtonInteraction()
+//const controls=new OrbitControls(camera,graphic.domElement)//to look around the map easily
 const customControls=new CustomControls(camera,scene)
 graphic.OnUpdate(dt=>{
     //console.log("delta time: "+graphic.GetDeltaTime())
@@ -86,3 +88,7 @@ graphic.OnUpdate(dt=>{
     //console.log(dt)
     customControls.CameraMovement(0.7,3,dt)
 })//the attribute is a function(dt) passed as callback, everything inside it will be executed each frame //dt has no purpose //arrow functions allows to create an anonym function in a variable
+
+function GoBack(){
+  console.log("button works")
+}

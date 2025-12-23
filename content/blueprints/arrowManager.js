@@ -1,10 +1,12 @@
 import { Graph } from "../data/graph"
-import {Clock,MathUtils} from "three";
+import {Clock,MathUtils, DoubleSide, AdditiveBlending, TextureLoader, NormalBlending} from "three";
 import Utils from "../data/utils";
 
 export class ArrowManager{
     static MakeArrow(arrow,camera){//adds the needed attributes and functions to the arrow
         arrow.material=arrow.material.clone()//create a copy so ifwe change the material color it only changes for this arrow and not for ALL arrows that have the material
+        this.AdjustOpacity(arrow.material)
+
         arrow.fromRoom=arrow.name.split("To")[0]
         arrow.toRoom=arrow.name.split("To")[1]
         arrow.interact=function(){
@@ -47,5 +49,16 @@ export class ArrowManager{
 
             },1/camera.framerate)
         }
+    }
+
+    static AdjustOpacity(material){
+        const loader = new TextureLoader();
+        const alphaTexture = loader.load("opacityFadeWhite.png")
+        alphaTexture.flipY = false; //because threeJS UVs are flipped verticaly compared to png
+    
+        material.color.set(0xffffff) 
+        //both following lines are needed for correct opacity fade rendering   
+        material.map = alphaTexture
+        material.alphaMap=alphaTexture
     }
 }
