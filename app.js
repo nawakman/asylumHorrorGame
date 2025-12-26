@@ -14,6 +14,7 @@ const scene = new Scene()
 const world=new World()
 const framerate=75//CHANGES THE PROJECT FRAMERATE
 const camera = new CustomCamera(framerate)
+const buttonInteraction= new ButtonInteraction()
 
 //const grogu=await LoadAssets('./grogu3dBaked.glb')//textures are bundled within the file too //public acts as the "resources" folder
 //world.AddMeshes(grogu.visuals)
@@ -39,8 +40,11 @@ world.AddInteractions(asylum.visuals,camera)
 Graph.MakeGraph(asylum.visuals)
 //console.log(Graph.GetRoom(Graph.GetAdjacentArrows("Corridor1")[1].toRoom).position)
 
-Graph.GetAdjacentArrows("Corridor1")[1].interact()
-//Graph.HighLightPath("Blue","White")
+//INITIAL POSITION
+Graph.GetAdjacentArrows("Corridor1")[1].interact(false)
+ButtonInteraction.SetGoBackButtonVisibility(false)
+
+Graph.HighLightPath("Hall","Chamber5")
 
 
 
@@ -79,7 +83,6 @@ scene.background = textureCube;
 scene.add(world)
 
 const graphic = new GraphicsManager(scene,camera,framerate)
-const buttonInteraction= new ButtonInteraction()
 //const controls=new OrbitControls(camera,graphic.domElement)//to look around the map easily
 const customControls=new CustomControls(camera,scene)
 graphic.OnUpdate(dt=>{
@@ -88,7 +91,3 @@ graphic.OnUpdate(dt=>{
     //console.log(dt)
     customControls.CameraMovement(0.7,3,dt)
 })//the attribute is a function(dt) passed as callback, everything inside it will be executed each frame //dt has no purpose //arrow functions allows to create an anonym function in a variable
-
-function GoBack(){
-  console.log("button works")
-}

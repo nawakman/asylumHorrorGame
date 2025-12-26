@@ -1,6 +1,7 @@
 import { Graph } from "../data/graph"
 import {Clock,MathUtils, DoubleSide, AdditiveBlending, TextureLoader, NormalBlending} from "three";
 import Utils from "../data/utils";
+import { ButtonInteraction } from "../data/buttonInteraction";
 
 export class ArrowManager{
     static MakeArrow(arrow,camera){//adds the needed attributes and functions to the arrow
@@ -9,7 +10,7 @@ export class ArrowManager{
 
         arrow.fromRoom=arrow.name.split("To")[0]
         arrow.toRoom=arrow.name.split("To")[1]
-        arrow.interact=function(){
+        arrow.interact=function(updateArrowToLastPosition=true){
 
             const arrowDirection=Graph.GetRoom(arrow.toRoom).position.clone().sub(Graph.GetRoom(arrow.fromRoom).position)
             const fromRoomPosition=camera.position.clone()
@@ -22,6 +23,13 @@ export class ArrowManager{
             var animDuration=0.5
             var timer=new Clock()
             var t=0
+            
+            if(updateArrowToLastPosition){
+                Graph.SetArrowToLastPosition(Graph.GetArrow(arrow.toRoom+"To"+arrow.fromRoom))//for the GoBack button
+                ButtonInteraction.SetGoBackButtonVisibility(true)
+                //console.log("arrow allegedly set")
+            }
+
             var moveAnim=setInterval(function(){//https://javascript.info/js-animation
 
                 if(timer.getElapsedTime()>animDuration){

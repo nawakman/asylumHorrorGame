@@ -1,10 +1,11 @@
 export class Graph{//we only need a single graph to represent a level, and we want to access it from anywhere, so the class will be static
 
     static graph=new Map()//map composed of key=[roomName:String], value=[map composed of key=[toRoom:String], value={arrow:arrowMesh}]
-    static meshesWithTo=[]//meshes whose name contain "To", they define graph edges e.g. "room1ToRoom2" will create an edge between room 1&2
+    static meshesWithTo=new Map()//meshes whose name contain "To", they define graph edges e.g. "room1ToRoom2" will create an edge between room 1&2
     static meshesWithRoom=new Map()//meshes whose name contain "room", they define graph vertices and will be accessed via their name
     static floydWarshallDistanceArray=new Map()//will store the distance matrix
-    static floydWarshallPaths=new Map()//will all shortest paths between two vertex
+    static floydWarshallPaths=new Map()//will contains all shortest paths between two vertex
+    static arrowTolastPosition
 
     constructor(){
         throw Error('A static class cannot be instantiated.')//https://fab1o.medium.com/javascript-static-class-3e1acdaec81    
@@ -13,27 +14,32 @@ export class Graph{//we only need a single graph to represent a level, and we wa
     static MakeGraph(mapVisuals){//the maps contains all vertices and edges, and other stuff that will be considered as isolated vertex and thus removed)
         for(const mesh of mapVisuals){//this loop separe edges(meshesWithTo) and vertices(meshesWithRoom) in different arrays
             if(mesh.name.includes("To")){
-                this.meshesWithTo.push(mesh)
+                this.meshesWithTo.set(mesh.name,mesh)
             }else if(mesh.name.startsWith("room")){
                 const meshNameWithoutRoom=mesh.name.slice(4)//removes "room" from the String
                 this.meshesWithRoom.set(meshNameWithoutRoom,mesh)
                 this.graph.set(meshNameWithoutRoom,new Map())
             }
         }
-        for(const orientedEdge of this.meshesWithTo){//this loop fills the adjacent rooms of each rooms using "meshWithTo" data
+        for(const orientedEdge of this.GetArrows()){//this loop fills the adjacent rooms of each rooms using "meshWithTo" data
             const roomNames=orientedEdge.name.split("To")//the edge is oriented, it goes from the room before "To" to the room after "To"
             //console.log(orientedEdge.name)
             this.graph.get(roomNames[0]).set(roomNames[1],{arrow:orientedEdge})//finds the room we begin the edge with, tell it that it can now go to "roomNames[1]" //tuple because we might add properties later //https://stackoverflow.com/questions/64278135/how-to-update-map-object-property-values //https://stackoverflow.com/questions/20392782/a-list-of-tuples-in-javascript
         }
         this.FloydWarshall()//create all shortest paths between two vertex
-        console.log(this.graph)
+        //console.log(this.graph)
         //console.log(this.meshesWithRoom)
     }
 
 
-    static GetArrows(){
-        return this.meshesWithTo
+    static GetArrow(arrowName){
+        return this.meshesWithTo.get(arrowName)
     }
+
+    static GetArrows(){
+        return this.meshesWithTo.values()
+    }
+
     static GetRoom(roomName){
         return this.meshesWithRoom.get(roomName)
     }
@@ -103,7 +109,7 @@ export class Graph{//we only need a single graph to represent a level, and we wa
 
     static HighLightPath(from,to){
         for(const arrow of this.GetArrows()){//turn all arrows red before highlighting new path
-            arrow.material.color.set(0xff0000)
+            arrow.material.color.set(0xffffff)
         }
         const path=this.GetPath(from,to)
         for(let i=0;i<path.length-1;i++){
@@ -111,7 +117,15 @@ export class Graph{//we only need a single graph to represent a level, and we wa
         }
     }
 
-    static GoBack(){
-        console.log("button works")
+    static SetArrowToLastPosition(arrow){
+        this.arrowTolastPosition=arrow
+    }
+
+    static GoBack(){//calling from Graph instead of this because goBackButton.addEventListener('click', Graph.GoBack) detaches GoBack from the Graph class(if that makes sense)
+        if(Graph.arrowTolastPosition!=undefined){
+            Graph.arrowTolastPosition.interact(false)
+        }else{
+            console.log("arrowToLastPosition is undefined")
+        }
     }
 }
